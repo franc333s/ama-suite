@@ -1,0 +1,24 @@
+@use './colors' as *;
+@use './units' as *;
+
+// Map - colors
+$map-colors: (
+  'ms-primary': $color-ms-primary,
+  'ms-secondary': $color-ms-secondary,
+);
+
+// MAP for z-index
+$map-layers: (
+  'below': -1,
+  'default': 0,
+  'above': 1,
+  'over': 2,
+  'absolute': 3,
+  'sky-is-the-limit': 4,
+);
+
+
+// Map espaciados
+// $map-spacings: (
+//   metido en functions
+// );

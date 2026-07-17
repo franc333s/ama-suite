@@ -1,0 +1,75 @@
+@use 'sass:list';
+@use 'sass:map';
+
+// Breakpoints
+@mixin mq($bp: $bp-medium, $bp-width: min-width) {
+  @media all and ($bp-width: $bp) {
+    @content;
+  }
+}
+
+// Margin, paddings and gaps
+@mixin margin-utilities($map-spacings, $prefix: '') {
+  @each $spacing, $value in $map-spacings {
+    .#{$prefix}m-#{$spacing} { margin: $value; }
+    .#{$prefix}my-#{$spacing} { margin-top: $value; margin-bottom: $value; }
+    .#{$prefix}mx-#{$spacing} { margin-right: $value; margin-left: $value; }
+    .#{$prefix}mt-#{$spacing} { margin-top: $value; }
+    .#{$prefix}mr-#{$spacing} { margin-right: $value; }
+    .#{$prefix}mb-#{$spacing} { margin-bottom: $value; }
+    .#{$prefix}ml-#{$spacing} { margin-left: $value; }
+  }
+}
+
+@mixin padding-utilities($map-spacings, $prefix: '') {
+  @each $spacing, $value in $map-spacings {
+    .#{$prefix}p-#{$spacing} { padding: $value; }
+    .#{$prefix}py-#{$spacing} { padding-top: $value; padding-bottom: $value; }
+    .#{$prefix}px-#{$spacing} { padding-right: $value; padding-left: $value; }
+    .#{$prefix}pt-#{$spacing} { padding-top: $value; }
+    .#{$prefix}pr-#{$spacing} { padding-right: $value; }
+    .#{$prefix}pb-#{$spacing} { padding-bottom: $value; }
+    .#{$prefix}pl-#{$spacing} { padding-left: $value; }
+  }
+}
+
+@mixin gap-utilities($map-spacings, $prefix: '') {
+  @each $spacing, $value in $map-spacings {
+    .#{$prefix}gap-#{$spacing} { gap: $value; }
+    .#{$prefix}gap-row-#{$spacing} { row-gap: $value; }
+    .#{$prefix}gap-col-#{$spacing} { column-gap: $value; }
+  }
+}
+
+@mixin spacing-utilities($map-spacings, $types: ('margin', 'padding', 'gap'), $prefix: '') {
+  @if list.index($types, 'margin') {
+    @include margin-utilities($map-spacings, $prefix);
+  }
+  @if list.index($types, 'padding') {
+    @include padding-utilities($map-spacings, $prefix);
+  }
+  @if list.index($types, 'gap') {
+    @include gap-utilities($map-spacings, $prefix);
+  }
+}
+
+// Flex
+@mixin flex($props: ()) {
+  display: flex;
+  
+  @each $key, $value in $props {
+    @if $key == 'direction' {
+      flex-direction: $value;
+    } @else if $key == 'justify' {
+      justify-content: $value;
+    } @else if $key == 'items' {
+      align-items: $value;
+    } @else if $key == 'wrap' and $value {
+      flex-wrap: wrap;
+    } @else if $key == 'grow' and $value {
+      flex-grow: 1;
+    } @else if $key == 'self' {
+      align-self: $value;
+    }
+  }
+}

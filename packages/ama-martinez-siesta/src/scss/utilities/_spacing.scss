@@ -1,0 +1,87 @@
+@use '../abstracts/functions' as *;
+@use '../abstracts/mixins' as mixins;
+
+@include mixins.spacing-utilities($map-spacings);
+
+
+// /* Utilities for margins, paddings and gaps */
+// @each $spacing, $i in $map-spacings {
+//   // MARGINS
+//   .m-#{$spacing} {
+//     // syntax in html: m-XX
+//     margin: $i;
+//   }
+//   .my-#{$spacing} {
+//     // my-XX
+//     margin-top: $i;
+//     margin-bottom: $i;
+//   }
+//   .mx-#{$spacing} {
+//     // mx-XX
+//     margin-right: $i;
+//     margin-left: $i;
+//   }
+//   .mt-#{$spacing} {
+//     // mt-XX
+//     margin-top: $i;
+//   }
+//   .mr-#{$spacing} {
+//     // mr-XX
+//     margin-right: $i;
+//   }
+//   .mb-#{$spacing} {
+//     // mb-XX
+//     margin-bottom: $i;
+//   }
+//   .ml-#{$spacing} {
+//     // ml-XX
+//     margin-left: $i;
+//   }
+
+//   // PADDINGS
+//   .p-#{$spacing} {
+//     // syntax p-XX
+//     padding: $i;
+//   }
+//   .py-#{$spacing} {
+//     // py-XX
+//     padding-top: $i;
+//     padding-bottom: $i;
+//   }
+//   .px-#{$spacing} {
+//     // px-XX
+//     padding-right: $i;
+//     padding-left: $i;
+//   }
+//   .pt-#{$spacing} {
+//     // pt-XX
+//     padding-top: $i;
+//   }
+//   .pr-#{$spacing} {
+//     // pr-XX
+//     padding-right: $i;
+//   }
+//   .pb-#{$spacing} {
+//     // pb-XX
+//     padding-bottom: $i;
+//   }
+//   .pl-#{$spacing} {
+//     // pl-XX
+//     padding-left: $i;
+//   }
+
+//   // GAPS
+//   .gap-#{$spacing} {
+//     gap: $i;
+//   }
+//   .gap-row-#{$spacing} {
+//     row-gap: $i;
+//   }
+//   .gap-col-#{$spacing} {
+//     column-gap: $i;
+//   }
+
+// }
+
+
+

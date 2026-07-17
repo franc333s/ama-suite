@@ -1,0 +1,41 @@
+@use "../../scss/abstracts" as *;
+
+.hero-home {
+  background-image: url(../../assets/img/home.webp);
+  width: 100vw;
+  height: 100vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: -1;
+  position: relative;
+}
+
+.hero-img {
+  position: absolute;
+  top: calc((100vh - (577px / 2)) / 2);
+  width: 100%;
+
+  @include mq($bp-large) {
+    width: 60%;
+    left: calc((100vw - 840px) / 2);
+    top: calc((100vh - (900px / 2)) / 2);
+  }
+}
+
+.hero-intro {
+  padding: spacing("10") spacing("02") 0;
+
+  @include mq($bp-large) {
+    padding: spacing("08") 0 0;
+    margin-left: calc(spacing("03") * 10);
+    margin-right: calc(spacing("06") * 10);
+  }
+
+  span {
+    @include mq($bp-large) {
+      // width: 64.8rem;
+      justify-self: end;
+    }
+  }
+}

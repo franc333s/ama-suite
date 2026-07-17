@@ -1,0 +1,42 @@
+@use "../../scss/abstracts" as *;
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("03");
+  margin-right: spacing("02");
+  margin-bottom: spacing("05");
+  margin-left: spacing("02");
+
+  //   border: 1px solid red;
+
+  @include mq($bp-medium) {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-areas:
+      "img img img"
+      "r1 r2 r3";
+  }
+
+  &__img {
+    width: 100%;
+    grid-area: img;
+
+    @include mq($bp-medium) {
+      width: 75%;
+      margin-bottom: 10rem;
+    }
+  }
+
+  &__r1 {
+    grid-area: r1;
+  }
+
+  &__r2 {
+    grid-area: r2;
+  }
+
+  &__r3 {
+    grid-area: r3;
+  }
+}

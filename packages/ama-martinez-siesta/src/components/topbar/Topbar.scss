@@ -1,0 +1,213 @@
+@use "../../scss/abstracts" as *;
+
+.topbar {
+  width: calc(100%);
+  padding: spacing("05") spacing("02");
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  pointer-events: none;
+
+  // border: 1px darkolivegreen solid;
+
+  @include mq($bp-large) {
+    display: grid;
+    grid-template-columns: 1fr auto 20rem;
+    padding: spacing("08") spacing("03");
+  }
+
+  &.open {
+    background-color: $color-ms-primary;
+    height: 100vh;
+    pointer-events: auto;
+  }
+
+  & > :nth-child(3) {
+    @include mq($bp-large) {
+      justify-items: end;
+    }
+  }
+
+  &__menu-btn {
+    font-size: 1.6rem;
+    text-transform: uppercase;
+    position: absolute;
+    top: spacing("05");
+    right: spacing("02");
+    pointer-events: auto;
+  }
+
+  &__logo {
+    font-family: $font-primary;
+    font-size: 2rem;
+    letter-spacing: -1px;
+
+    pointer-events: auto;
+
+    @include mq($bp-uppermedium) {
+      position: relative;
+    }
+
+    &::after {
+      @include mq($bp-uppermedium) {
+        content: "";
+        display: none;
+        position: absolute;
+        background-image: url("../../assets/img/fdo-mtnz-zzz-ng1.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 84rem;
+        height: 50rem;
+        top: calc((100vh - 50rem) / 2);
+        left: calc((100vw - 84rem) / 2);
+        z-index: 2;
+      }
+
+      @include mq($bp-large) {
+        width: 94rem;
+        height: 60rem;
+        top: calc(((100vh - 60rem) / 2) + 4rem);
+        left: calc((100vw - 94rem) / 2);
+      }
+    }
+
+    &:hover::after {
+      @include mq($bp-uppermedium) {
+        display: block;
+      }
+    }
+  }
+
+  &--home &__logo:hover::after {
+    @include mq($bp-uppermedium) {
+      display: none; // que no se vea el hover en la home
+    }
+  }
+
+  &__link {
+    font-family: $font-secondary;
+    font-size: 1.4rem;
+    pointer-events: auto;
+  }
+
+  &__projects {
+    margin-top: spacing("03");
+    margin-bottom: spacing("02");
+    pointer-events: auto;
+
+    @include mq($bp-large) {
+      margin: 0;
+    }
+
+    &__link {
+      font-family: $font-secondary;
+      font-size: 1.4rem;
+      pointer-events: auto;
+
+      span:first-of-type {
+        display: inline-block;
+        width: 44px;
+        // background-color: blue;
+      }
+
+      span:nth-of-type(2) {
+        display: inline-block;
+        width: 24px;
+        // background-color: green;
+      }
+
+      span:nth-of-type(3) {
+        display: inline-block;
+        // background-color: gold;
+      }
+    }
+  }
+
+  &__cta {
+    margin-top: 10rem;
+
+    @include mq($bp-medium) {
+      margin-top: 0;
+    }
+
+    & > :last-child {
+      margin-top: spacing("02");
+    }
+  }
+
+  &__details {
+    margin-top: 11rem;
+    margin-bottom: 4rem;
+
+    @include mq($bp-large) {
+      display: none;
+    }
+  }
+}
+
+// Modal de contacto
+.contact-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* background-color: rgba(0, 0, 0, 0.5); */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+}
+
+.contact-modal {
+  display: flex;
+  flex-direction: column;
+  gap: spacing("02");
+
+  &__front,
+  &__back {
+    background-color: $color-bg-ms-primary;
+    box-shadow: 10px 10px 4px 0 rgba(0, 0, 0, 0.4);
+    font-family: $font-secondary;
+    font-size: 14px;
+    text-align: center;
+    // width: 32rem;
+    // height: 20.8rem;
+
+    width: calc(100vw - 64px);
+    aspect-ratio: 1.54;
+    max-width: 52rem;
+    max-height: 33.6rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: spacing("02") 0;
+
+    @include mq($bp-medium) {
+      // width: 52rem;
+      // height: 33.6rem;
+      font-size: 20px;
+      padding: spacing("03") 0;
+    }
+  }
+
+  &__logo {
+    font-family: $font-primary;
+    font-size: 16px;
+    text-transform: lowercase;
+
+    @include mq($bp-medium) {
+      font-size: 24px;
+    }
+  }
+
+  &__text {
+    font-size: 14px;
+
+    @include mq($bp-medium) {
+      font-size: 20px;
+    }
+  }
+}

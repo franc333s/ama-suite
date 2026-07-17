@@ -1,0 +1,9 @@
+/* Utilities for text color, background color */
+@each $color, $i in $map-colors {
+  .text-color-#{$color} {
+    color: $i;
+  }
+  .bg-color-#{$color} {
+    background-color: $i;
+  }
+}

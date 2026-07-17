@@ -1,0 +1,45 @@
+@use "../../scss/abstracts" as *;
+
+.project-card {
+  //   display: flex;
+  //   flex-direction: column;
+
+  height: fit-content;
+
+  &__image {
+    width: 100%;
+  }
+
+  &__top {
+    display: flex;
+    align-items: baseline;
+  }
+
+  &__title {
+    margin-right: spacing("00");
+
+    &::after {
+      content: ".";
+    }
+  }
+
+  &__client {
+    margin-right: spacing("00");
+
+    &::after {
+      content: ",";
+    }
+  }
+
+  &__taxon-item {
+    &:not(:first-child)::before {
+      content: " / ";
+    }
+  }
+
+  &--hidden-slot {
+    visibility: hidden;
+    pointer-events: none;
+    opacity: 0;
+  }
+}
