@@ -1,0 +1,82 @@
+@font-face {
+  font-family: 'OratorStd';
+  src:
+    url('../../assets/fonts/OratorStd.woff2') format('woff2'),
+    url('../../assets/fonts/OratorStd.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MinionProRegular';
+  src:
+    url('../../assets/fonts/MinionPro-Regular.woff2') format('woff2'),
+    url('../../assets/fonts/MinionPro-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+// FUENTES - tipos
+$font-primary: 'OratorStd';
+$font-secondary: 'MinionProRegular';
+
+// // FUENTES - pesos
+// $fw-regular: 400;
+// $fw-bold: 700;
+// $fw-extrabold: 800;
+
+// // FUENTES - tamaños
+// $fs-xs-fix: 1.2rem;
+// $fs-s-fix: 1.4rem;
+// $fs-m-fix: 1.6rem;
+// $fs-l-fix: 1.8rem;
+// $fs-xxs-var: clamp(1.6rem, 0.19vi + 1.53rem, 1.8rem);
+// $fs-xs-var: clamp(1.7rem, 0.29vi + 1.59rem, 2rem);
+// $fs-s-var: clamp(1.8rem, 0.57vi + 1.58rem, 2.4rem);
+// $fs-m-var: clamp(2rem, 1.14vi + 1.55rem, 3.2rem);
+// $fs-l-var: clamp(2.4rem, 1.52vi + 1.81rem, 4rem);
+// $fs-xl-var: clamp(4rem, 0.76vi + 3.7rem, 4.8rem);
+
+// // FUENTES - Implementación párrafos
+// $fs-p-body-xs: $fs-xs-fix; // body xs
+// $fs-p-body-s: $fs-s-fix; // body x
+// $fs-p-body-m: $fs-m-fix; // body m
+// $fs-p-subheading: $fs-l-fix; // subheading
+// $fs-p-overline: $fs-xxs-var; // overline
+
+// // FUENTES - Implementación headers
+// $fs-header-xs: $fs-xs-var; // h5
+// $fs-header-s: $fs-s-var; // h4
+// $fs-header-m: $fs-m-var; // h3
+// $fs-header-l: $fs-l-var; // h2
+// $fs-header-xl: $fs-xl-var; // h1
+
+// // FUENTES - Implementación botones
+// $fs-button: $fs-m-fix; // button = body m
+
+// // ALTO DE LÍNEA - Tamaños
+// $lh-xs-fix: 1.8rem;
+// $lh-s-fix: 2rem;
+// $lh-m-fix: 2.2rem;
+// $lh-l-fix: 2.5rem;
+// $lh-xxs-var: clamp(2.2rem, 0.29vi + 2.09rem, 2.5rem);
+// $lh-xs-var: clamp(2.5rem, 0.29vi + 2.39rem, 2.8rem);
+// $lh-s-var: clamp(2.8rem, 0.57vi + 2.58rem, 3.4rem);
+// $lh-m-var: clamp(3rem, 1.43vi + 2.44rem, 4.5rem);
+// $lh-l-var: clamp(3.4rem, 2.1vi + 2.58rem, 5.6rem);
+// $lh-xl-var: clamp(5.6rem, 1.05vi + 5.19rem, 6.7rem);
+
+// // ALTO DE LÍNEA - Implementación párrafos
+// $lh-p-body-xs: $lh-xs-fix;
+// $lh-p-body-s: $lh-s-fix;
+// $lh-p-body-m: $lh-m-fix;
+// $lh-p-subheading: $lh-l-fix;
+// $lh-p-overline: $lh-xxs-var;
+// $lh-header-xs: $lh-xs-var;
+// $lh-header-s: $lh-s-var;
+// $lh-header-m: $lh-m-var;
+// $lh-header-l: $lh-l-var;
+// $lh-header-xl: $lh-xl-var;
+
+// // ALTO DE LÍNEA - Implementación botones
+// $lh-button: $lh-m-fix; // button = body m

@@ -1,0 +1,101 @@
+@use "../abstracts" as *;
+
+.spinner {
+  margin: 0;
+  padding: 0;
+  width: 1.6rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+
+  .item {
+    width: 0.8rem;
+    height: 0.8rem;
+    background-color: $color-bg-ms-secondary;
+    border-radius: 10px;
+
+    &-one {
+      animation: blue 3s ease-in-out infinite;
+    }
+    &-two {
+      animation: red 3s ease-in-out infinite;
+    }
+    &-three {
+      animation: yellow 3s ease-in-out infinite;
+    }
+    &-four {
+      animation: green 3s ease-in-out infinite;
+    }
+  }
+
+  &-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 20rem;
+  }
+
+  @keyframes blue {
+    0%,
+    100% {
+      transform: translate(0%, 0%);
+    }
+    25% {
+      transform: translate(100%, 0%);
+    }
+    50% {
+      transform: translate(100%, 100%);
+    }
+    75% {
+      transform: translate(0%, 100%);
+    }
+  }
+
+  @keyframes red {
+    0%,
+    100% {
+      transform: translate(0%, 0%);
+    }
+    25% {
+      transform: translate(0%, 100%);
+    }
+    50% {
+      transform: translate(-100%, 100%);
+    }
+    75% {
+      transform: translate(-100%, 0%);
+    }
+  }
+
+  @keyframes yellow {
+    0%,
+    100% {
+      transform: translate(0%, 0%);
+    }
+    25% {
+      transform: translate(0%, -100%);
+    }
+    50% {
+      transform: translate(100%, -100%);
+    }
+    75% {
+      transform: translate(100%, 0%);
+    }
+  }
+  @keyframes green {
+    0%,
+    100% {
+      transform: translate(0%, 0%);
+    }
+    25% {
+      transform: translate(-100%, 0%);
+    }
+    50% {
+      transform: translate(-100%, -100%);
+    }
+    75% {
+      transform: translate(0%, -100%);
+    }
+  }
+}

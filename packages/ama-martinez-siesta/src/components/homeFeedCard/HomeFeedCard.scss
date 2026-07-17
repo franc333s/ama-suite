@@ -1,0 +1,78 @@
+@use "../../scss/abstracts" as *;
+
+.home-feed-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+    "grid-first-time grid-last-time"
+    "grid-img grid-img";
+
+  @include mq($bp-medium) {
+    grid-template-columns: 0.5fr 1fr 0.5fr;
+    grid-template-areas: "grid-first-time grid-img grid-last-time";
+  }
+
+  &:nth-child(4n + 1) {
+    .home-feed-card__img {
+      width: 80%;
+      z-index: 0;
+
+      @include mq($bp-large) {
+        width: 50%;
+      }
+    }
+  }
+
+  &:nth-child(4n + 2) {
+    .home-feed-card__img {
+      width: 92%;
+
+      @include mq($bp-large) {
+        width: 80%;
+      }
+    }
+  }
+
+  &:nth-child(4n + 3) {
+    .home-feed-card__img {
+      width: 65%;
+
+      @include mq($bp-large) {
+        width: 65%;
+      }
+    }
+  }
+
+  &:nth-child(4n) {
+    .home-feed-card__img {
+      width: 60%;
+
+      @include mq($bp-large) {
+        width: 70%;
+      }
+    }
+  }
+
+  &__img {
+    grid-area: grid-img;
+    justify-self: center;
+    margin: spacing("21") 0 spacing("32");
+    transition: transform 0.4s ease-out;
+
+    @include mq($bp-medium) {
+      margin-top: 0;
+    }
+  }
+
+  &__time {
+    &:first-of-type {
+      grid-area: grid-first-time;
+      justify-self: start;
+    }
+    &:last-of-type {
+      grid-area: grid-last-time;
+      justify-self: end;
+    }
+  }
+}

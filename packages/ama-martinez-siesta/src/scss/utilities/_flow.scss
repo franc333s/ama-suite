@@ -1,0 +1,54 @@
+@use '../abstracts/mixins/' as mixins;
+
+// displays
+.block {
+  display: block;
+}
+
+.hidden {
+  display: none;
+}
+
+.inline {
+  display: inline
+}
+
+.flex {
+  @include mixins.flex;
+
+  &-col {
+    @include mixins.flex((direction: column));
+  }
+
+  &__justify-between {
+    @include mixins.flex((justify: space-between));
+  }
+  &__justify-start {
+    @include mixins.flex((justify: start));
+  }
+  &__justify-center {
+    @include mixins.flex((justify: center));
+  }
+  &__justify-end {
+    @include mixins.flex((justify: end));
+  }
+  &__items-start {
+    @include mixins.flex((items: start));
+  }
+  &__items-center {
+    @include mixins.flex((items: center));
+  }
+  &__items-end {
+    @include mixins.flex((items: end));
+  }
+  &__wrap {
+    @include mixins.flex((wrap: true));
+  }
+  &__grow {
+    @include mixins.flex((grow: true));
+  }
+  &__self-end {
+    @include mixins.flex((self: end));
+  }
+}
+

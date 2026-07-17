@@ -1,0 +1,42 @@
+@use "../../scss/abstracts" as *;
+
+.projects {
+  &-layout-controls {
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 spacing("02") 0;
+
+    @include mq($bp-medium) {
+      justify-content: flex-start;
+      gap: spacing("04");
+      margin-top: spacing("16");
+    }
+
+    @include mq($bp-large) {
+      margin-left: spacing("03");
+      margin-right: spacing("03");
+    }
+
+    .button {
+      &.active {
+        // border: 1px solid red;
+      }
+      &:not(.active) {
+        color: $color-ms-gray-400;
+      }
+    }
+  }
+  &-feed.view-grid {
+    margin: spacing("00") spacing("02");
+
+    @include mq($bp-medium) {
+      margin-top: spacing("00");
+    }
+
+    @include mq($bp-large) {
+      margin-left: spacing("03");
+      margin-right: spacing("03");
+    }
+  }
+}

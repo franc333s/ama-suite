@@ -1,0 +1,36 @@
+@use '../abstracts/colors' as *;
+@use '../abstracts/units' as *;
+@use '../abstracts/maps' as *;
+
+@use 'sass:map';
+
+
+
+// Función que transforma multiplicadores en valores reales de css
+@function generate-spacings($multipliers, $small-unit, $base-unit) {
+  $result: ();
+  @each $key, $multiplier in $multipliers {
+    $value: null; // declaración previa
+    
+    @if $multiplier == 0.5 {
+      $value: $small-unit;
+    } @else {
+      $value: calc($base-unit * $multiplier);
+    }
+    
+    $result: map.merge($result, ($key: $value));
+  }
+  @return $result;
+}
+
+$map-spacings: generate-spacings($spacing-multipliers, $base-unit-s, $base-unit);
+
+// Función para variables en scss
+@function spacing($key) {
+  @return map.get($map-spacings, $key);
+}
+
+@function z($layer) {
+  //  z-index: z(KEY)
+  @return map-get($map-layers, $layer);
+}

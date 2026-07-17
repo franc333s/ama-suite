@@ -1,0 +1,7 @@
+@use "../../scss/abstracts" as *;
+
+.home-feed {
+  display: flex;
+  flex-direction: column;
+  margin: spacing("21") spacing("02");
+}

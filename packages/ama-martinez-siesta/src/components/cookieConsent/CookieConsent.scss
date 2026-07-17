@@ -1,0 +1,151 @@
+@import "../../scss/abstracts";
+
+.cookie-consent {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  padding: spacing("03");
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+  animation: slideUp 0.3s ease-out;
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  &__container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: spacing("04");
+    align-items: end;
+
+    @include mq($bp-small) {
+      grid-template-columns: 1fr;
+      gap: spacing("03");
+    }
+  }
+
+  &__content {
+    color: #fff;
+  }
+
+  &__title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: spacing("01");
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  &__description {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: spacing("02");
+
+    @include mq($bp-small) {
+      font-size: 0.9rem;
+    }
+  }
+
+  &__categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: spacing("02");
+  }
+
+  &__category {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.75);
+    padding: 0.4rem 0.8rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+  }
+
+  &__category-name {
+    font-weight: 500;
+  }
+
+  &__category-badge {
+    font-size: 0.75rem;
+    background: rgba(255, 100, 100, 0.3);
+    color: #ff9999;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  &__actions {
+    display: flex;
+    gap: spacing("02");
+
+    @include mq($bp-small) {
+      flex-direction: column;
+      width: 100%;
+    }
+  }
+
+  &__button {
+    padding: 0.8rem 1.6rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+
+    @include mq($bp-small) {
+      width: 100%;
+      padding: 1rem;
+    }
+
+    &--primary {
+      background: #fff;
+      color: #000;
+
+      &:hover {
+        background: #f0f0f0;
+        transform: translateY(-2px);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+
+    &--secondary {
+      background: transparent;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+
+      &:hover {
+        border-color: rgba(255, 255, 255, 0.6);
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      &:active {
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+}

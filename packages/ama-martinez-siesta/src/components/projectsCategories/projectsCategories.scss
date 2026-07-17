@@ -1,0 +1,44 @@
+@use "../../scss/abstracts/" as *;
+
+.projects-categories {
+  display: flex;
+  gap: spacing("02");
+  margin: spacing("02") 0 spacing("02") spacing("02");
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+
+  &::-webkit-scrollbar {
+    height: 0;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  li {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .category {
+    font-size: 14px;
+    display: inline-block;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &:visited {
+      color: $color-ms-secondary;
+    }
+
+    &:last-of-type {
+      margin-right: spacing("02");
+    }
+
+    &.active {
+      text-decoration: underline;
+    }
+  }
+}
