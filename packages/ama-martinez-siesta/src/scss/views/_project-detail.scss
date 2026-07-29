@@ -1,0 +1,82 @@
+@import "../../scss/abstracts";
+
+.project-detail {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: spacing("02");
+
+    // Desktop: info (heading + taxonomías) | descripción ancha | X al extremo derecho.
+    @include mq($bp-large) {
+        grid-template-columns: 1fr 2fr auto;
+    }
+
+    // Agrupa heading + taxonomías como una sola celda del grid;
+    // internamente se apilan en columna.
+    &__info {
+        grid-column: 1;
+        grid-row: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__heading {
+        display: flex;
+        gap: 2px;
+
+        h1 {
+            line-height: 2rem;
+        }
+    }
+
+    &__taxonomies {
+        display: flex;
+        flex-wrap: wrap;
+
+        p {
+            white-space: nowrap;
+        }
+
+        p:not(:last-of-type)::after {
+            content: "/";
+            margin-right: spacing("01");
+            margin-left: spacing("01");
+        }
+    }
+
+    &__description {
+        grid-column: 1;
+        grid-row: 2;
+        margin-top: spacing("05");
+
+        @include mq($bp-large) {
+            grid-column: 2;
+            grid-row: 1;
+            margin-top: 0;
+        }
+    }
+
+    &__close {
+        text-transform: uppercase;
+        font-family: "Arial Narrow", Arial, sans-serif;
+        font-stretch: condensed;
+        font-size: 2rem;
+
+        grid-column: 2;
+        grid-row: 1;
+        justify-self: end;
+        align-self: start;
+        cursor: pointer;
+
+        @include mq($bp-large) {
+            grid-column: 3;
+        }
+    }
+
+    &.hero-intro {
+        margin-right: 0;
+
+        @include mq($bp-large) {
+            margin-right: spacing("03");
+        }
+    }
+}
