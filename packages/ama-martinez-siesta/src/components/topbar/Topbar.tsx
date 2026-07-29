@@ -48,6 +48,11 @@ function Topbar({ isHome = false }: TopbarProps) {
   const isProjectsPage = /^\/projects(\/|$)/.test(location.pathname);
   const shouldRenderProjectsList = !isProjectsPage || isTablet;
 
+  // En la página interna de proyecto (/project/:slug) ocultamos projects y cta
+  // solo en desktop; en mobile se muestran con normalidad.
+  const isProjectDetailPage = /^\/project\/[^/]+/.test(location.pathname);
+  const hideOnProjectDetailDesktop = isProjectDetailPage && isDesktop;
+
   return (
     <>
       <nav
@@ -70,7 +75,9 @@ function Topbar({ isHome = false }: TopbarProps) {
 
         {/* Solo renderiza si NO estamos en projects page en mobile */}
         {shouldRenderProjectsList && (
-          <ul className={`topbar__projects ${shouldShowMenu ? "" : "hidden"}`}>
+          <ul
+            className={`topbar__projects ${shouldShowMenu && !hideOnProjectDetailDesktop ? "" : "hidden"}`}
+          >
             <li>
               <Link className="topbar__projects__link" to="/projects">
                 <span></span>
@@ -171,7 +178,9 @@ function Topbar({ isHome = false }: TopbarProps) {
           </ul>
         )}
 
-        <div className={`topbar__cta ${shouldShowMenu ? "" : "hidden"}`}>
+        <div
+          className={`topbar__cta ${shouldShowMenu && !hideOnProjectDetailDesktop ? "" : "hidden"}`}
+        >
           <p>
             <Button
               className="topbar__link"
