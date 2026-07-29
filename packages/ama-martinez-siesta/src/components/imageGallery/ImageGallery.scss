@@ -67,7 +67,7 @@
     opacity: 1;
 
     &.prev {
-      background-color: rgba(174, 34, 50, 0.403);
+      // background-color: rgba(174, 34, 50, 0.403);
       left: 0;
 
       @include mq($bp-medium) {
@@ -85,7 +85,7 @@
     }
 
     &.next {
-      background-color: rgba(66, 34, 174, 0.209);
+      // background-color: rgba(66, 34, 174, 0.209);
       right: 0;
 
       @include mq($bp-medium) {
