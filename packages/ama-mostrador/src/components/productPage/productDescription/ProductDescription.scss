@@ -1,0 +1,87 @@
+@use "../../../scss/abstracts/variables";
+@use "../../../scss/abstracts/mixins";
+
+
+.product-desc {
+    font-size: variables.$fs-product-page-text;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    //gap: clamp(2.8rem, 10.45vw + -0.96rem, 12rem);
+    padding: clamp(4rem, -5.29vw + 6.06rem, 2rem) variables.$vertical-padding 0;
+
+    @include mixins.mq(variables.$bp-lowermedium) {
+        grid-template-columns: 2fr .5fr;
+    }
+
+    @include mixins.mq(variables.$bp-medium) {
+        grid-template-columns: 2fr .6fr;
+        padding-top: 0;
+    }
+
+    @include mixins.mq(variables.$bp-lowerlarge) {
+        grid-template-columns: 2fr 1fr;
+        column-gap: .6rem;
+
+    }
+
+    &__title {
+        font-size: variables.$fs-product-page-title;
+        font-size:  1.2rem;
+        text-transform: uppercase;
+    }
+
+    &__text {
+        font-size:  clamp(2rem, 0.93vw + 1.67rem, 3rem);
+        font-size:  2rem;
+        line-height: 100%;
+        // revisar line height en about
+
+        &--width {
+            max-width: 90%;
+        }
+    }
+
+    &__aside {
+        display: flex;
+        flex-direction: column;
+        gap: 5.2rem;
+    }
+
+    &__cta {
+        text-transform: uppercase;
+        font-size:  clamp(2rem, 0.93vw + 1.67rem, 3rem);
+        font-size: 2rem;
+        line-height: 100%;
+        padding-top: .8rem;
+
+        & > a {
+            border: 1px black solid;
+            // border-radius: 2rem;
+            padding: .1rem .8rem;
+            background-color: black;
+            color: white;
+
+        }
+
+
+
+
+        & > a {
+            text-decoration: none;
+        }
+    }
+}
+
+
+@media all and (max-device-height: 1024px) and (orientation:portrait) {
+    .aux-padding { 
+        //background-color: red; 
+        padding-top: 3.2rem;
+    } 
+  }
+  @media all and (max-device-height: 1024px) and (orientation:landscape) {
+    .aux-padding { 
+        //background-color: blue; 
+        padding-top: 3.2rem;
+    } 
+  }

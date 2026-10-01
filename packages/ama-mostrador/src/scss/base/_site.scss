@@ -1,0 +1,37 @@
+@use '../abstracts/variables.scss';
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    font-family: variables.$font-primary;
+    background-color: variables.$color-bg-full-white;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+// Fonts
+
+// Archivo Narrow
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Narrow&display=swap');
+
+// Martian Mono
+@import url('https://fonts.googleapis.com/css2?family=Martian+Mono&display=swap');
+
+// Tiny5
+@font-face {
+    font-family: "Tiny5x3-160";
+    src: local("Tiny5x3-160"),
+      url("./../../fonts/tiny5x3-160.woff2") format("woff2"),
+      url("./../../fonts/tiny5x3-160.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
+}
+

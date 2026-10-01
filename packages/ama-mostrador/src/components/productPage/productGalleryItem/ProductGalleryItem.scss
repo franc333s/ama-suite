@@ -1,0 +1,34 @@
+@use "../../../scss/abstracts/variables";
+@use "../../../scss/abstracts/mixins";
+
+
+.product-gallery {
+
+    &__item {
+        padding-bottom: 4rem;
+
+        &__title {
+            font-size: variables.$fs-product-page-fig-text;
+            display: flex;
+            gap: .6rem;
+            padding-left: clamp(0.4rem, 0.38vw + 0.25rem, 0.8rem);
+
+            @include mixins.mq(variables.$bp-lowerlarge) {
+                padding-left: .2rem;
+            }
+        }
+
+        &__img {
+            width: 100%;
+            transition: all .2s ease-in-out;
+
+            &:hover {
+
+                @include mixins.mq(variables.$bp-medium) {
+                    filter: invert(100%);
+
+                }
+            }
+        }
+    }
+}

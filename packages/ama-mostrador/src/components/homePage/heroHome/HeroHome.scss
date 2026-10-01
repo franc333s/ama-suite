@@ -1,0 +1,14 @@
+@use "../../../scss/abstracts/variables";
+@use "../../../scss/abstracts/mixins";
+
+
+.home-hero {
+    z-index: -2;
+    min-height: 94vh;
+
+    position: relative;
+
+    @include mixins.mq(variables.$bp-lowermedium) {
+        min-height: 100vh;
+    }
+}

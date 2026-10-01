@@ -1,0 +1,22 @@
+@use "../../../scss/abstracts/variables";
+@use "../../../scss/abstracts/mixins";
+
+
+.product-gallery {
+    background-color: variables.$color-bg-full-white;
+    display: flex;
+    flex-direction: column;
+    padding-top: clamp(4rem, 3.92vw + 2.47rem, 10rem);
+
+    @include mixins.mq(variables.$bp-medium) {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        row-gap: variables.$row-gap--base;
+        column-gap: variables.$column-gap--base;
+        align-items: end;
+    }
+
+    @include mixins.mq(variables.$bp-lowerlarge) {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}

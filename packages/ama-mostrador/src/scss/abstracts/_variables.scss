@@ -1,0 +1,97 @@
+// Colors
+$color-full-white: hsl(0, 0%, 100%); // #FFFFFF
+$color-full-black: hsl(0, 0%, 10%); // #1A1A1A
+
+// Bg implementation
+$color-bg-full-white: $color-full-white;
+$color-bg-full-black: $color-full-black;
+
+
+// Font family
+$font-primary: "Archivo Narrow", sans-serif;
+$font-secondary: "Tiny5x3-160";
+
+
+// Font weights
+$font-weight-xlight: 200;
+$font-weight-light: 300;
+$font-weight-regular: 400;
+$font-weight-bold: 700;
+
+
+// Font size
+$fs-header-large: clamp(3rem, 0.56vw + 2.8rem, 3.6rem);
+$fs-header-uppermedium: clamp(2rem, 0.93vw + 1.67rem, 3rem);
+$fs-header-medium: 2rem;
+$fs-header-small: 1.8rem;
+
+
+$fs-p-large: clamp(9rem, 7.41vw + 6.33rem, 17rem);
+$fs-p-uppermedium: 2rem;
+$fs-p-medium: 1.8rem;
+$fs-p-lowermedium: 1.4rem;
+$fs-p-small: 1.2rem;
+
+// Topbar
+$fs-topbar: 1.8rem;
+//Footer
+$fs-footer: 1.4rem;
+$fs-footer--small: 1rem;
+
+//Headers implementation 
+$fs-header1: $fs-header-large; // 3-3.6
+$fs-header2: $fs-header-medium; // 2
+$fs-header3: $fs-header-small; // 1.8
+
+//P implementation 
+$fs-text-aux: $fs-p-large; // 9-17
+$fs-labels: $fs-p-small; // 1.2
+$fs-index: $fs-p-lowermedium; // 1.4
+
+
+
+//Product page
+
+$fs-product-page-title: clamp(1.6rem, 0.19vw + 1.53rem, 1.8rem);
+$fs-product-page-text: clamp(1.6rem, 0.76vw + 1.3rem, 2.4rem);
+$fs-product-page-text--variation: clamp(9rem, 7.41vw + 6.33rem, 17rem);
+$fs-product-page-fig-text: 1.4rem;
+
+//About page
+$fs-about-page-title: clamp(1.6rem, 0.19vw + 1.53rem, 1.8rem);
+
+
+
+// Mediaqueries
+$bp-small: 24rem; // 384px 
+$bp-lowermedium: 37rem; // 592px
+$bp-medium: 48rem; // 768px
+$bp-uppermedium: 60rem; // 960px
+$bp-lowerlarge: 75rem; // 1200px
+$bp-xlowerlarge: 84rem; // 1344px
+$bp-large: 90rem; // 1440px
+$bp-xlarge: 120rem; // 1920px
+
+// Mq for ipad
+$bp-portrait: $bp-medium;
+$bp-landscape: 64rem; // 1024px
+
+
+// Padding implementations
+
+// Vertical main padding
+$vertical-padding: clamp(0.4rem, 0.38vw + 0.25rem, 0.8rem);
+$vertical-padding--small: .2rem;
+
+//Grid gaps
+$row-gap--base: 8rem;
+$column-gap--base: .2rem;
+
+
+// Variables for @each / @for / etc
+
+// Maps
+$map-colors: (
+    "full-white": $color-full-white,
+    "full-black": $color-full-black
+);

@@ -1,0 +1,71 @@
+@use "../../scss/abstracts/variables";
+@use "../../scss/abstracts/mixins";
+
+
+.topbar {
+    color: variables.$color-full-white;
+    mix-blend-mode: difference;
+    padding: variables.$vertical-padding;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+
+    &.is-home {
+        &__inner__item.no-underline > a {
+            text-decoration: none;
+        }
+    }
+
+    &__title {
+        font-size: variables.$fs-topbar;
+
+        & > a {
+            text-decoration: none;
+        }
+    }
+
+
+    &__inner__item {
+        font-size:  variables.$fs-topbar;
+
+        &:not(:last-child)::after {
+            content: ",";
+        }
+
+        &:hover {
+            font-style: italic;
+        }
+
+        &__arrow {
+            font-size:  variables.$fs-topbar;
+        }
+    }
+    
+
+    &__inner {
+        display: flex;
+    }
+
+
+    // Topbar home
+    &--home {
+        color: variables.$color-full-white;
+        mix-blend-mode: difference;
+        //background-color: variables.$color-bg-full-white;
+        padding: variables.$vertical-padding;
+        // position: absolute;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    // &--fixed {
+        // background-color: transparent;
+        // position: fixed;
+        // top: 1.9rem;
+        // left: 0;
+        // width: 100%;
+        // z-index: 3;
+    // }
+}

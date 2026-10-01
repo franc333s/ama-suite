@@ -1,0 +1,62 @@
+@use "../../../scss/abstracts/variables";
+@use "../../../scss/abstracts/mixins";
+
+
+.product-intro {
+    display: grid;
+    grid-template-columns: 2.5fr 2fr 1fr;
+    row-gap: 2.4rem;
+    // column-gap: 1rem;
+    padding: clamp(0.4rem, 0.76vw + 0.1rem, 1.2rem) variables.$vertical-padding 0;
+
+    @include mixins.mq(variables.$bp-lowermedium) {
+        grid-template-columns: 1.1fr .9fr .5fr;
+        column-gap: 0;
+    }
+
+    @include mixins.mq(variables.$bp-medium) {
+        grid-template-columns: 1fr .6fr .4fr .6fr;
+    }
+
+    @include mixins.mq(variables.$bp-lowerlarge) {
+        // grid-template-columns: .6fr .5fr .3fr .35fr 1.5fr;
+        grid-template-columns: .55fr .45fr .25fr .35fr 1.4fr;
+    }
+
+    &__title {
+        font-size: variables.$fs-product-page-title;
+        text-transform: uppercase;
+        font-size: 1.2rem;
+    }
+
+    &__text {
+        font-size: variables.$fs-product-page-text;
+        white-space: nowrap;
+        font-size: 2rem;
+        line-height: 100%;
+
+        // word-wrap: break-word;
+        // overflow-wrap: break-word;
+        white-space: pre-wrap;
+
+        &--variation {
+            font-family: variables.$font-secondary;
+            font-size: variables.$fs-product-page-text--variation;
+            text-transform: uppercase;
+            
+            @include mixins.mq(variables.$bp-lowerlarge) {
+                justify-self: end;
+            }
+        }
+    }
+
+    &__mat-dim {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+    }
+
+}
+
+
+

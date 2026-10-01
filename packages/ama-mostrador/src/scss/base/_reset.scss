@@ -1,0 +1,49 @@
+// Links and buttons
+a {
+    color: inherit;
+}
+
+a:visited {
+    color: inherit;
+}
+
+button {
+    color: inherit;
+    background-color: transparent;
+    border: none;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    text-transform: inherit;
+}
+
+button:visited {
+    color: inherit;
+}
+
+
+// Lists
+li {
+    list-style: none;
+}
+
+
+
+//Headers & paragraphs - margins
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+li,
+ul {
+    margin: 0;
+    padding: 0;
+    margin-block-start: 0;
+    margin-block-end: 0;
+}
+
+
+// Other

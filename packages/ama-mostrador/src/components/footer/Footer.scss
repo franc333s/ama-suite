@@ -1,0 +1,63 @@
+@use "../../scss/abstracts/variables";
+@use "../../scss/abstracts/mixins";
+
+
+
+.footer {
+    background-color: variables.$color-bg-full-white;
+    border-top: 1px variables.$color-bg-full-black solid;
+    padding: .2rem variables.$vertical-padding .8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .4rem;
+
+    @include mixins.mq(variables.$bp-medium) {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1.2fr;
+        padding-bottom: .4rem;
+    }
+
+    @include mixins.mq(variables.$bp-lowerlarge) {
+        grid-template-columns: 1fr 1fr 3fr 1fr .4fr .4fr;
+    }
+
+    &__inner {
+        display: flex;
+        column-gap: variables.$column-gap--base;
+
+        &:first-child {
+
+            @include mixins.mq(variables.$bp-medium, max-width) {
+                padding-top: .2rem;
+            }
+        }
+
+        &--jc--center {
+
+            @include mixins.mq(variables.$bp-lowerlarge) {
+                justify-content: center;
+            }
+        }
+
+        &--jc--end {
+
+            @include mixins.mq(variables.$bp-lowerlarge) {
+                justify-content: end;
+            }
+        }
+    }
+
+    &__index {
+        font-size: variables.$fs-footer--small;
+    }
+
+    &__item {
+        font-size: variables.$fs-footer;
+        line-height: 116%;
+    }
+}
+
+
+
+

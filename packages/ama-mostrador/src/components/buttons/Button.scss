@@ -1,0 +1,30 @@
+@use "../../scss/abstracts/mixins";
+@use "../../scss/abstracts/variables";
+
+.btn {
+
+    &--primary {
+        font-size: 2rem;
+        line-height: 100%;
+        text-transform: uppercase;
+        padding-top: .8rem;
+
+        & > a {
+            color: variables.$color-full-white;
+            background-color: variables.$color-bg-full-black;
+            text-decoration: none;
+            border: 2px black solid;
+            padding: .1rem .8rem;
+            transition: .3s;
+
+            &:hover,
+            &:focus {
+
+                @include mixins.mq(variables.$bp-medium) {
+                    color: black;
+                    box-shadow: inset 0 -2.5em 0 0 white;
+                }
+            }
+        }
+    }
+}

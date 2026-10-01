@@ -1,0 +1,65 @@
+@use "../abstracts/variables";
+@use "../abstracts/mixins";
+
+.product {
+    margin-top: 8rem;
+
+    @include mixins.mq(variables.$bp-medium) {
+        margin-top: 0;
+    }
+
+    &__top {
+        position: fixed;
+        width: 100%;
+        z-index: -1;
+    }
+
+    &__bottom {
+        position: absolute;
+        background-color: variables.$color-bg-full-white;
+        margin-top: clamp(24rem, 66.66vw + 0rem, 77.66rem);
+
+        @include mixins.mq(variables.$bp-uppermedium) {
+            margin-top: 74vh;
+        }
+
+        @include mixins.mq(variables.$bp-lowerlarge) {
+            margin-top: 86vh;
+        }
+
+    }
+}
+
+
+.about {
+    padding-top: clamp(10rem, 7.41vw + 7.33rem, 18rem);
+
+    @include mixins.mq(variables.$bp-lowerlarge) {
+        display: grid;
+        grid-template-columns: 3.5fr 2fr;
+        gap: 10rem;
+        min-height: 95vh;
+    }
+
+    &__sect {
+        padding: 0 variables.$vertical-padding;
+
+        &__flex {
+
+            @include mixins.mq(variables.$bp-medium){
+                display: flex;
+                gap: 10rem;
+            }
+        }
+    }
+}
+
+.language-selector {
+    color: variables.$color-full-white;
+    background-color: variables.$color-bg-full-black;
+    font-size: 1.2rem;
+    position: fixed;
+    right: variables.$vertical-padding;
+    top: .4rem;
+    padding: .2rem;
+}

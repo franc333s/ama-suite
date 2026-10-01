@@ -1,0 +1,21 @@
+@use "../../../scss/abstracts/variables";
+@use "../../../scss/abstracts/mixins";
+
+
+.product-hero {
+
+    &__img {
+        width: 100%;
+        z-index: -1;
+
+        @include mixins.mq(variables.$bp-uppermedium) {
+            height: 74vh;
+            object-fit: cover;
+        }
+
+        @include mixins.mq(variables.$bp-lowerlarge) {
+            height: 86vh;
+            object-fit: cover;
+        }
+    }
+}

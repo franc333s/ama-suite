@@ -1,0 +1,26 @@
+@use "../../../scss/abstracts/variables";
+@use "../../../scss/abstracts/mixins";
+
+
+.bg-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+
+    will-change: transform;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+
+
+    &--mob {
+        height: 100vh;
+        width: auto;
+        object-fit: cover;
+    }
+    &--des {
+        height: 100vh;
+        width: 100%;
+        object-fit: cover;
+    }
+}
