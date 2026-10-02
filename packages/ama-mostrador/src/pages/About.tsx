@@ -30,7 +30,7 @@ function About() {
 
             <div className="about__div">
                 <p className="about__title--variation">[em] [ou] [es] [ti] [ar] [ei] [di] [ou] [ar]</p>
-                <img className="about__img" src="/EU-plan/mostrador-logos.webp" alt="Mostrador proyecto subvencionado por la UE" />
+                <img className="about__img" src="/mostrador-logos.webp" alt="Mostrador Gallery" />
             </div>
 
         </main>

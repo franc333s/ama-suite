@@ -43,6 +43,7 @@
             font-family: variables.$font-secondary;
             font-size: variables.$fs-product-page-text--variation;
             text-transform: uppercase;
+            padding-bottom: 0.1em;
             
             @include mixins.mq(variables.$bp-lowerlarge) {
                 justify-self: end;

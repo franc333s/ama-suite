@@ -1,23 +1,61 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ProductCard from "../productCard/ProductCard";
 import type { Product } from "../../../../types/product";
+import { getWorks } from "../../../../api/works";
 import './ProductsFeed.scss'
 
 function ProductsFeed() {
   const [works, setWorks] = useState<Product[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loadedPage, setLoadedPage] = useState(0);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  const loading = loadedPage < page;
+  const hasMore = page < totalPages;
 
   useEffect(() => {
-    fetch('https://crudecrude.com/wp-json/wp/v2/work?_embed')
-      .then((res) => res.json())
-      .then((data) => setWorks(data))
-      .catch((err) => console.error('Error al cargar trabajos:', err));
-  }, []);
+    let cancelled = false;
+
+    getWorks(page)
+      .then(({ works: newWorks, totalPages }) => {
+        if (cancelled) return;
+        setWorks((prev) => [...prev, ...newWorks]);
+        setTotalPages(totalPages);
+      })
+      .catch((err) => {
+        console.error('Error al cargar trabajos:', err);
+        if (!cancelled) setTotalPages(page);
+      })
+      .finally(() => {
+        if (!cancelled) setLoadedPage(page);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [page]);
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel || !hasMore || loading) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setPage((p) => p + 1);
+      },
+      { rootMargin: '600px' }
+    );
+    observer.observe(sentinel);
+
+    return () => observer.disconnect();
+  }, [hasMore, loading]);
 
   return (
-
+    <>
     <main className="products-feed">
       {works.length === 0 ? (
-        <p>No hay trabajos aún.</p>
+        !loading && <p>No hay trabajos aún.</p>
       ) : (
         works.map((item, index) => {
             const imageUrl =
@@ -39,7 +77,8 @@ function ProductsFeed() {
         })
       )}
     </main>
-
+    <div ref={sentinelRef} />
+    </>
   );
 }
 

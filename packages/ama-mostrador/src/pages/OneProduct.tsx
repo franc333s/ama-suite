@@ -9,8 +9,7 @@ import ProductIntro from "../components/productPage/productIntro/ProductIntro";
 import ProductDescription from "../components/productPage/productDescription/ProductDescription";
 import ProductGallery from "../components/productPage/productGallery/ProductGallery";
 import type { Product } from "../types/product";
-
-// import BounceLoader from "react-spinners/BounceLoader";
+import { getWorkBySlug } from "../api/works";
 
 
 function OneProduct() {
@@ -19,10 +18,10 @@ function OneProduct() {
     const [ product, setProduct ] = useState<Product | null>(null);
 
     useEffect(() => {
-        fetch(`https://crudecrude.com/wp-json/wp/v2/work?slug=${slug}&_embed`)
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.length > 0) setProduct(data[0]);
+        if (!slug) return;
+        getWorkBySlug(slug)
+          .then((work) => {
+            if (work) setProduct(work);
           })
           .catch((err) => console.error('Error al cargar el producto:', err));
       }, [slug]);
