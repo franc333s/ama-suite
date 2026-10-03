@@ -59,6 +59,32 @@ pnpm --filter ama-mostrador dev
 pnpm --filter ama-martinez-siesta dev
 ```
 
+## Building for production
+
+Run the build for a specific application from the repository root (dependencies must be installed first with `pnpm install`):
+
+```bash
+pnpm --filter ama-mostrador build
+pnpm --filter ama-martinez-siesta build
+```
+
+Each build runs `tsc -b && vite build` and outputs the result to the `dist/` folder inside the corresponding package (for example `packages/ama-mostrador/dist/`).
+
+To build every project at once:
+
+```bash
+pnpm -r build
+```
+
+To preview a production build locally:
+
+```bash
+pnpm --filter ama-mostrador preview
+pnpm --filter ama-martinez-siesta preview
+```
+
+Note: use `pnpm` rather than `npm`, and run the scripts through it. Running `tsc` or `vite` directly will fail because they are only available inside each package's `node_modules`.
+
 ## Development workflow
 
 To keep the monorepo consistent, the following practices are recommended:

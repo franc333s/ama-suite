@@ -12,10 +12,26 @@ build/
 npm-debug.log*
 pnpm-debug.log*
 
-# Env
+# Env (any .env.* variant, e.g. .env.production; the example file stays tracked)
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
+
+# Secrets, credentials and server config
+*.pem
+*.key
+*.p12
+*.pfx
+.htpasswd
+wp-config.php
+.ftpconfig
+sftp.json
+ftp-config.json
+
+# Database dumps and backups
+*.sql
+*.sql.gz
+*.bak
 
 # Editor / OS
 .DS_Store
