@@ -7,20 +7,22 @@
     top: 0;
     left: 0;
     z-index: -1;
+    object-fit: cover;
 
     will-change: transform;
     backface-visibility: hidden;
-    transform: translateZ(0);
 
+    // Mobile: the video is landscape, so it is rotated 90deg to fill the portrait screen
+    width: 100vh;
+    height: 100vw;
+    transform-origin: top left;
+    transform: translateZ(0) rotate(90deg) translateY(-100%);
 
-    &--mob {
-        height: 100vh;
-        width: auto;
-        object-fit: cover;
-    }
-    &--des {
-        height: 100vh;
+    // Desktop: the video is shown as it is, in landscape
+    @include mixins.mq(variables.$bp-lowermedium) {
         width: 100%;
-        object-fit: cover;
+        height: 100vh;
+        transform-origin: center;
+        transform: translateZ(0);
     }
 }
