@@ -20,12 +20,18 @@
             padding-bottom: 4rem;
         }
 
+        // Hover area: image + 2px around it
         &__front {
+            padding: 2px;
+            margin: -2px;
+        }
+
+        &__front > * {
             transition: transform .2s ease-in-out;
         }
-    
-        &__front:hover {
-    
+
+        &__front:hover > * {
+
             @include mixins.mq(variables.$bp-medium) {
                 transform: translate(0, -2.2rem);
             }

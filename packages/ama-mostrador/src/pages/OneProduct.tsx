@@ -10,21 +10,26 @@ import ProductDescription from "../components/productPage/productDescription/Pro
 import ProductGallery from "../components/productPage/productGallery/ProductGallery";
 import type { Product } from "../types/product";
 import { getWorkBySlug } from "../api/works";
+import NotFound from "./NotFound";
 
 
 function OneProduct() {
 
     const { slug } = useParams();
     const [ product, setProduct ] = useState<Product | null>(null);
+    const [ notFound, setNotFound ] = useState(false);
 
     useEffect(() => {
         if (!slug) return;
         getWorkBySlug(slug)
           .then((work) => {
             if (work) setProduct(work);
+            else setNotFound(true);
           })
           .catch((err) => console.error('Error al cargar el producto:', err));
       }, [slug]);
+
+    if (notFound) return <NotFound />;
 
     return (
         <>

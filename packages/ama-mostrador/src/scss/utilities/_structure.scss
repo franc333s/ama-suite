@@ -54,6 +54,18 @@
     }
 }
 
+// 404: the footer stays at the bottom of the page even if there is little content
+.not-found {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+
+    &__main {
+        flex: 1;
+    }
+}
+
 .language-selector {
     color: variables.$color-full-white;
     background-color: variables.$color-bg-full-black;
