@@ -16,7 +16,7 @@ function App() {
         <Helmet prioritizeSeoTags>
           <meta
             name="description"
-            content="Mostrador is a collectible design gallery showcasing works at the intersection of art and design from contemporary designers and emerging talents."
+            content="Martínez Siesta is a creative studio specializing in art direction and graphic design, founded in 2020 in Valencia."
           />
         </Helmet>
         <Routes>

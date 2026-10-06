@@ -208,9 +208,9 @@ function Topbar({ isHome = false }: TopbarProps) {
             <p>
               <a
                 className="topbar__link "
-                href="mailto:info@nartinezsiesta.com"
+                href="mailto:info@martinezsiesta.com"
               >
-                info@nartinezsiesta.com
+                info@martinezsiesta.com
               </a>
             </p>
             <p>
