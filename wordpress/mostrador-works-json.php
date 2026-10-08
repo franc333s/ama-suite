@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: Mostrador Works JSON
- * Description: Genera un JSON estático con los trabajos (tipo "work") cada vez que se crean, editan o borran, para que la web los lea sin arrancar PHP.
- * Version: 1.0.0
+ * Description: Genera un JSON estático con los trabajos (tipo "work") y las exposiciones (tipo "exhibition") cada vez que se crean, editan o borran, para que la web los lea sin arrancar PHP.
+ * Version: 1.2.0
  */
 
 /*
@@ -30,7 +30,22 @@
  * That same folder also holds automation-by-installatron.php, which is created
  * by IONOS: leave it alone.
  *
- * Output: wp-content/uploads/mostrador/works.json
+ * It also exposes the "heroimage" Pods field (a single file/image field of the
+ * "work" pod) as `hero_image`, a plain URL, both in works.json and in the
+ * regular REST API. The featured image is used for the card in the home feed,
+ * and the hero image for the top of the product page.
+ *
+ * The "exhibition" post type (pod "exhibition", same fields as "work") gets the
+ * same treatment: exhibitions.json, with its own hero_image field. If its pod
+ * does not exist yet, it is simply skipped.
+ *
+ * The same plugin also publishes the content of the About page as about.json
+ * (email, based, about text and image). That content lives in the Pods pod
+ * "about" (a custom post type), in its first published item, with the fields
+ * "email", "based", "text" and "image".
+ * See src/api/about.ts and src/pages/About.tsx in the website.
+ *
+ * Output: wp-content/uploads/mostrador/works.json, exhibitions.json and about.json
  * Status and manual rebuild button: WordPress admin > Tools > Mostrador JSON
  *
  * IMPORTANT: if the fields of the "work" pod are changed in WordPress, or the
@@ -40,35 +55,158 @@
 
 defined( 'ABSPATH' ) || exit;
 
-const MOSTRADOR_POST_TYPE = 'work';
+// Post types que se publican como JSON estático: post type => archivo
+const MOSTRADOR_COLLECTIONS = array(
+	'work'       => 'works.json',
+	'exhibition' => 'exhibitions.json',
+);
 const MOSTRADOR_PER_PAGE  = 100;
+const MOSTRADOR_HERO_FIELD = 'heroimage';
+
+// Pod "about": se usa su primer item (los campos son email, based, text e image)
+const MOSTRADOR_ABOUT_POD = 'about';
+
+/**
+ * Campo REST `hero_image`: URL de la imagen del hero (campo de Pods "heroimage").
+ * Pods guarda el campo de archivo como ID de adjunto en los metadatos; se
+ * aceptan también los formatos array/objeto por si cambia la configuración.
+ * Vacío si el trabajo no tiene imagen de hero.
+ */
+add_action( 'rest_api_init', function () {
+	foreach ( array_keys( MOSTRADOR_COLLECTIONS ) as $post_type ) {
+		register_rest_field( $post_type, 'hero_image', array(
+			'get_callback' => function ( $post ) {
+				$value = get_post_meta( $post['id'], MOSTRADOR_HERO_FIELD, true );
+
+				if ( is_array( $value ) ) {
+					$value = $value['ID'] ?? $value['id'] ?? reset( $value );
+				}
+
+				$attachment_id = (int) $value;
+				if ( ! $attachment_id ) {
+					return '';
+				}
+
+				$url = wp_get_attachment_image_url( $attachment_id, 'medium_large' );
+				return $url ? $url : '';
+			},
+			'schema'       => array(
+				'description' => 'URL de la imagen del hero',
+				'type'        => 'string',
+			),
+		) );
+	}
+} );
 
 function mostrador_json_dir() {
 	return trailingslashit( wp_upload_dir()['basedir'] ) . 'mostrador';
 }
 
-function mostrador_json_path() {
-	return mostrador_json_dir() . '/works.json';
+function mostrador_json_path( $post_type ) {
+	return mostrador_json_dir() . '/' . MOSTRADOR_COLLECTIONS[ $post_type ];
 }
 
-function mostrador_json_url() {
-	return trailingslashit( wp_upload_dir()['baseurl'] ) . 'mostrador/works.json';
+function mostrador_json_url( $post_type ) {
+	return trailingslashit( wp_upload_dir()['baseurl'] ) . 'mostrador/' . MOSTRADOR_COLLECTIONS[ $post_type ];
 }
 
 /**
- * Pide todos los trabajos a la REST API interna (con imágenes embebidas),
- * con el mismo formato que devuelve /wp-json/wp/v2/work
+ * Post types de MOSTRADOR_COLLECTIONS que existen de verdad en WordPress
+ * (la exposición no existe hasta que se crea su pod)
  */
-function mostrador_collect_works() {
+function mostrador_active_post_types() {
+	return array_values( array_filter( array_keys( MOSTRADOR_COLLECTIONS ), 'post_type_exists' ) );
+}
+
+function mostrador_about_json_path() {
+	return mostrador_json_dir() . '/about.json';
+}
+
+/**
+ * ID del primer item publicado del pod "about" (es un custom post type),
+ * o 0 si todavía no hay ninguno
+ */
+function mostrador_about_item_id() {
+	$ids = get_posts( array(
+		'post_type'      => MOSTRADOR_ABOUT_POD,
+		'post_status'    => 'publish',
+		'posts_per_page' => 1,
+		'orderby'        => 'ID',
+		'order'          => 'ASC',
+		'fields'         => 'ids',
+	) );
+
+	return $ids ? (int) $ids[0] : 0;
+}
+
+/**
+ * Contenido de la página About. Los campos vacíos se devuelven vacíos
+ * ("" o lista vacía) y la web no pinta nada en su lugar.
+ * - about: lista de textos (campo repetible o texto con saltos de línea);
+ *   puede llevar HTML en línea, que la web sanea antes de mostrarlo.
+ * - image: URL de la imagen (campo de archivo, guardado como ID de adjunto).
+ */
+function mostrador_collect_about() {
+	$item_id = mostrador_about_item_id();
+
+	// Con Pods se leen los campos con su API (maneja repetibles y archivos);
+	// si no está disponible, se leen los metadatos del item directamente
+	$pod = ( $item_id && function_exists( 'pods' ) ) ? pods( MOSTRADOR_ABOUT_POD, $item_id ) : null;
+	if ( $pod && ! $pod->exists() ) {
+		$pod = null;
+	}
+
+	$get = function ( $field ) use ( $pod, $item_id ) {
+		if ( $pod ) {
+			return $pod->field( $field );
+		}
+		return $item_id ? get_post_meta( $item_id, strtok( $field, '.' ), true ) : '';
+	};
+
+	$text = $get( 'text' );
+	if ( ! is_array( $text ) ) {
+		$text = array( $text );
+	}
+	$text = array_values( array_filter( array_map( 'trim', array_filter( $text, 'is_string' ) ) ) );
+
+	$image = $get( 'image.ID' );
+	if ( is_array( $image ) ) {
+		$image = $image['ID'] ?? $image['id'] ?? reset( $image );
+	}
+	$image_id = (int) $image;
+
+	return array(
+		'email'     => trim( (string) $get( 'email' ) ),
+		'based'     => trim( (string) $get( 'based' ) ),
+		'about'     => $text,
+		'image'     => $image_id ? (string) wp_get_attachment_image_url( $image_id, 'full' ) : '',
+		'image_alt' => $image_id ? (string) get_post_meta( $image_id, '_wp_attachment_image_alt', true ) : '',
+	);
+}
+
+// Mismo contenido por la API normal, por si no existe el archivo estático
+add_action( 'rest_api_init', function () {
+	register_rest_route( 'mostrador/v1', '/about', array(
+		'methods'             => 'GET',
+		'callback'            => 'mostrador_collect_about',
+		'permission_callback' => '__return_true',
+	) );
+} );
+
+/**
+ * Pide todos los items de un post type a la REST API interna (con imágenes
+ * embebidas), con el mismo formato que devuelve /wp-json/wp/v2/{tipo}
+ */
+function mostrador_collect_items( $post_type ) {
 	$route = function_exists( 'rest_get_route_for_post_type_items' )
-		? rest_get_route_for_post_type_items( MOSTRADOR_POST_TYPE )
-		: '/wp/v2/' . MOSTRADOR_POST_TYPE;
+		? rest_get_route_for_post_type_items( $post_type )
+		: '/wp/v2/' . $post_type;
 
 	if ( ! $route ) {
 		return null;
 	}
 
-	$works       = array();
+	$items       = array();
 	$page        = 1;
 	$total_pages = 1;
 
@@ -86,11 +224,11 @@ function mostrador_collect_works() {
 
 		$headers     = $response->get_headers();
 		$total_pages = (int) ( $headers['X-WP-TotalPages'] ?? 1 );
-		$works       = array_merge( $works, rest_get_server()->response_to_data( $response, true ) );
+		$items       = array_merge( $items, rest_get_server()->response_to_data( $response, true ) );
 		$page++;
 	} while ( $page <= $total_pages );
 
-	return $works;
+	return $items;
 }
 
 /**
@@ -112,12 +250,11 @@ function mostrador_write_htaccess( $dir ) {
 	file_put_contents( $file, $rules );
 }
 
-function mostrador_rebuild_works_json() {
-	$works = mostrador_collect_works();
-	if ( null === $works ) {
-		return false;
-	}
-
+/**
+ * Escribe un JSON en uploads/mostrador. Se escribe en un archivo temporal y se
+ * renombra, para que nunca se lea a medias
+ */
+function mostrador_write_json( $filename, $data ) {
 	$dir = mostrador_json_dir();
 	if ( ! wp_mkdir_p( $dir ) ) {
 		return false;
@@ -125,39 +262,85 @@ function mostrador_rebuild_works_json() {
 
 	mostrador_write_htaccess( $dir );
 
-	// Se escribe en un archivo temporal y se renombra, para que nunca se lea a medias
-	$tmp = $dir . '/works.json.tmp';
-	if ( false === file_put_contents( $tmp, wp_json_encode( $works ) ) ) {
+	$tmp = $dir . '/' . $filename . '.tmp';
+	if ( false === file_put_contents( $tmp, wp_json_encode( $data ) ) ) {
 		return false;
 	}
 
-	return rename( $tmp, mostrador_json_path() );
+	return rename( $tmp, $dir . '/' . $filename );
+}
+
+function mostrador_rebuild_collection_json( $post_type ) {
+	$items = mostrador_collect_items( $post_type );
+	if ( null === $items ) {
+		return false;
+	}
+
+	return mostrador_write_json( MOSTRADOR_COLLECTIONS[ $post_type ], $items );
+}
+
+// Regenera todos los JSON que existen; true si todos han ido bien
+function mostrador_rebuild_all() {
+	$ok = mostrador_rebuild_about_json();
+	foreach ( mostrador_active_post_types() as $post_type ) {
+		$ok = mostrador_rebuild_collection_json( $post_type ) && $ok;
+	}
+	return $ok;
+}
+
+function mostrador_rebuild_about_json() {
+	return mostrador_write_json( 'about.json', mostrador_collect_about() );
 }
 
 /**
  * La regeneración se hace al final de la petición ("shutdown"), una sola vez,
  * cuando ya se han guardado todos los campos de Pods.
  */
-function mostrador_schedule_rebuild() {
+function mostrador_schedule_rebuild( $post_type ) {
+	static $scheduled = array();
+	if ( isset( $scheduled[ $post_type ] ) ) {
+		return;
+	}
+	$scheduled[ $post_type ] = true;
+	add_action( 'shutdown', function () use ( $post_type ) {
+		mostrador_rebuild_collection_json( $post_type );
+	} );
+}
+
+function mostrador_schedule_rebuild_all() {
+	foreach ( mostrador_active_post_types() as $post_type ) {
+		mostrador_schedule_rebuild( $post_type );
+	}
+	mostrador_schedule_about_rebuild();
+}
+
+function mostrador_schedule_about_rebuild() {
 	static $scheduled = false;
 	if ( $scheduled ) {
 		return;
 	}
 	$scheduled = true;
-	add_action( 'shutdown', 'mostrador_rebuild_works_json' );
+	add_action( 'shutdown', 'mostrador_rebuild_about_json' );
 }
 
 function mostrador_maybe_rebuild_for_post( $post_id ) {
 	if ( wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) ) {
 		return;
 	}
-	if ( MOSTRADOR_POST_TYPE === get_post_type( $post_id ) ) {
-		mostrador_schedule_rebuild();
+
+	$post_type = get_post_type( $post_id );
+	if ( array_key_exists( $post_type, MOSTRADOR_COLLECTIONS ) ) {
+		mostrador_schedule_rebuild( $post_type );
+	} elseif ( MOSTRADOR_ABOUT_POD === $post_type ) {
+		mostrador_schedule_about_rebuild();
 	}
 }
 
 // Crear, editar, publicar o despublicar
-add_action( 'save_post_' . MOSTRADOR_POST_TYPE, 'mostrador_maybe_rebuild_for_post' );
+foreach ( array_keys( MOSTRADOR_COLLECTIONS ) as $mostrador_type ) {
+	add_action( 'save_post_' . $mostrador_type, 'mostrador_maybe_rebuild_for_post' );
+}
+add_action( 'save_post_' . MOSTRADOR_ABOUT_POD, 'mostrador_maybe_rebuild_for_post' );
 
 // Papelera y borrado
 add_action( 'trashed_post', 'mostrador_maybe_rebuild_for_post' );
@@ -173,19 +356,28 @@ foreach ( array( 'added_post_meta', 'updated_post_meta', 'deleted_post_meta' ) a
 
 // Pods: al guardar un trabajo desde su pantalla
 add_action( 'pods_api_post_save_pod_item', function ( $pieces ) {
-	if ( isset( $pieces['pod']['name'] ) && MOSTRADOR_POST_TYPE === $pieces['pod']['name'] ) {
-		mostrador_schedule_rebuild();
+	$name = $pieces['pod']['name'] ?? '';
+	if ( array_key_exists( $name, MOSTRADOR_COLLECTIONS ) ) {
+		mostrador_schedule_rebuild( $name );
+	} elseif ( MOSTRADOR_ABOUT_POD === $name ) {
+		mostrador_schedule_about_rebuild();
 	}
 } );
 
 // Si se edita o se borra una imagen de la mediateca
-add_action( 'edit_attachment', 'mostrador_schedule_rebuild' );
-add_action( 'delete_attachment', 'mostrador_schedule_rebuild' );
+foreach ( array( 'edit_attachment', 'delete_attachment' ) as $hook ) {
+	add_action( $hook, 'mostrador_schedule_rebuild_all' );
+}
 
-// Primera vez: si el archivo no existe, se genera al entrar al panel
+// Primera vez: si los archivos no existen, se generan al entrar al panel
 add_action( 'admin_init', function () {
-	if ( ! file_exists( mostrador_json_path() ) ) {
-		mostrador_schedule_rebuild();
+	foreach ( mostrador_active_post_types() as $post_type ) {
+		if ( ! file_exists( mostrador_json_path( $post_type ) ) ) {
+			mostrador_schedule_rebuild( $post_type );
+		}
+	}
+	if ( ! file_exists( mostrador_about_json_path() ) ) {
+		mostrador_schedule_about_rebuild();
 	}
 } );
 
@@ -199,35 +391,52 @@ function mostrador_render_admin_page() {
 		return;
 	}
 
+	echo '<div class="wrap">';
+
 	$message = '';
 	if ( isset( $_POST['mostrador_rebuild'] ) && check_admin_referer( 'mostrador_rebuild' ) ) {
-		$message = mostrador_rebuild_works_json()
-			? 'JSON regenerado correctamente.'
-			: 'No se ha podido regenerar el JSON. Revisa los permisos de la carpeta uploads.';
+		$message = mostrador_rebuild_all()
+			? 'JSON regenerados correctamente.'
+			: 'No se han podido regenerar los JSON. Revisa los permisos de la carpeta uploads.';
 	}
 
-	$path   = mostrador_json_path();
-	$exists = file_exists( $path );
-	$count  = $exists ? count( (array) json_decode( file_get_contents( $path ), true ) ) : 0;
-
-	echo '<div class="wrap"><h1>Mostrador JSON</h1>';
+	echo '<h1>Mostrador JSON</h1>';
 
 	if ( $message ) {
 		echo '<div class="notice notice-info"><p>' . esc_html( $message ) . '</p></div>';
 	}
 
-	echo '<p>El JSON se regenera solo cada vez que se crea, edita o borra un trabajo. Este botón solo hace falta si algo no se ha actualizado.</p>';
+	echo '<p>Los JSON se regeneran solos cada vez que se crea, edita o borra un trabajo, una exposición o el item de About. Este botón solo hace falta si algo no se ha actualizado.</p>';
 
-	if ( $exists ) {
-		printf(
-			'<p>Archivo: <a href="%1$s" target="_blank" rel="noopener">%1$s</a><br>Trabajos incluidos: %2$d<br>Última actualización: %3$s</p>',
-			esc_url( mostrador_json_url() ),
-			(int) $count,
-			esc_html( wp_date( 'd/m/Y H:i:s', filemtime( $path ) ) )
-		);
-	} else {
-		echo '<p><strong>El archivo todavía no existe.</strong></p>';
+	foreach ( array_keys( MOSTRADOR_COLLECTIONS ) as $post_type ) {
+		if ( ! post_type_exists( $post_type ) ) {
+			printf( '<p><strong>%s</strong>: el pod todavía no existe.</p>', esc_html( $post_type ) );
+			continue;
+		}
+
+		$path = mostrador_json_path( $post_type );
+		if ( file_exists( $path ) ) {
+			printf(
+				'<p>Archivo: <a href="%1$s" target="_blank" rel="noopener">%1$s</a><br>Items incluidos: %2$d<br>Última actualización: %3$s</p>',
+				esc_url( mostrador_json_url( $post_type ) ),
+				count( (array) json_decode( file_get_contents( $path ), true ) ),
+				esc_html( wp_date( 'd/m/Y H:i:s', filemtime( $path ) ) )
+			);
+		} else {
+			printf( '<p><strong>%s</strong>: el archivo todavía no existe.</p>', esc_html( $post_type ) );
+		}
 	}
+
+	$about_counts = wp_count_posts( MOSTRADOR_ABOUT_POD );
+	$about_id     = mostrador_about_item_id();
+	printf(
+		'<h2>About</h2><p>Versión del plugin: %1$s<br>Items del pod "%2$s": %3$d publicados, %4$d en borrador<br>Item usado: %5$s</p>',
+		esc_html( get_file_data( __FILE__, array( 'v' => 'Version' ) )['v'] ),
+		esc_html( MOSTRADOR_ABOUT_POD ),
+		(int) ( $about_counts->publish ?? 0 ),
+		(int) ( $about_counts->draft ?? 0 ),
+		$about_id ? '#' . (int) $about_id : 'ninguno (hay que publicar un item del pod)'
+	);
 
 	echo '<form method="post">';
 	wp_nonce_field( 'mostrador_rebuild' );
