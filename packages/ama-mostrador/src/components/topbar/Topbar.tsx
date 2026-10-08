@@ -1,103 +1,53 @@
-import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+
+import { useAbout } from "../../hooks/useAbout";
 
 import "./Topbar.scss";
 
 function Topbar() {
 
     const location = useLocation();
-    const [, setScrollY] = useState(0);
-    const [addStaticClass, setAddStaticClass] = useState(false);
+    const about = useAbout();
     const isHome = location.pathname === "/";
 
-    useEffect(() => {
+    // En la home el menú va después del hero (sticky) y el título es el h1 de la página;
+    // en el resto de páginas va fijo arriba y el título es un párrafo
+    const Title = isHome ? "h1" : "p";
 
-        const handleScroll = () => {
-            setScrollY(window.scrollY);
+    return (
+        <>
+        <nav className={isHome ? "topbar--home" : "topbar"}>
+            <Title className="topbar__title text-trans--uppercase">
+                <Link to="/">Mostrador / Gallery</Link>
+            </Title>
+            <ul className="topbar__inner">
+                <span className="topbar__inner__item__arrow">→&nbsp;</span><li className="topbar__inner__item text-trans--uppercase">
+                    <Link to="/">Works</Link>
+                </li>
 
-            if (isHome) {
-                if (window.scrollY > 950) {
-                setAddStaticClass(true);
-                } else {
-                setAddStaticClass(false);
-                }
-            }
-        };
+                <li className="topbar__inner__item text-trans--uppercase">
+                    &nbsp;<Link to="/exhibitions">Exhibitions</Link>
+                </li>
 
-        window.addEventListener("scroll", handleScroll);
+                <li className="topbar__inner__item text-trans--uppercase">
+                    &nbsp;<Link to="/about">About</Link>
+                </li>
 
-        return () => {
-            window.removeEventListener("scroll", handleScroll);
-        };
-    }, [isHome]);
-
-    if (isHome) {
-        return (
-            <>
-            <nav className={`topbar--home ${addStaticClass ? 'topbar--fixed' : ''}`}>
-                <h1 className="topbar__title text-trans--uppercase">
-                    <Link to="/">Mostrador / Gallery</Link>
-                </h1>
-                <ul className="topbar__inner">
-                    <span className="topbar__inner__item__arrow">→&nbsp;</span><li className="topbar__inner__item text-trans--uppercase">
-                        <Link to="/">Works</Link>
-                    </li>
-
+                {about?.mailinfo && (
                     <li className="topbar__inner__item text-trans--uppercase">
-                        &nbsp;<Link to="/exhibitions">Exhibitions</Link>
+                        &nbsp;<Link to={`mailto:${about.mailinfo}`}>Contact</Link>
                     </li>
+                )}
 
+                {about?.instagram && (
                     <li className="topbar__inner__item text-trans--uppercase">
-                        &nbsp;<Link to="/about">About</Link>
+                        &nbsp;<Link to={about.instagram} target="_blank">Instagram</Link>
                     </li>
-
-                    <li className="topbar__inner__item text-trans--uppercase">
-                        &nbsp;<Link to="mailto:info@mostradorgallery.com">Contact</Link>
-                    </li>
-
-                    <li className="topbar__inner__item text-trans--uppercase">
-                        &nbsp;<Link to="https://www.instagram.com/mostradorgallery/" target="_blank">Instagram</Link>
-                    </li>
-                </ul>
-            </nav>
-            </>
-        )
-
-    } else {
-        return (
-            <>
-            <nav className="topbar">
-                <p className="topbar__title text-trans--uppercase">
-                    <Link to="/">Mostador / Gallery</Link>
-                </p>
-                <ul className="topbar__inner">
-                    <span className="topbar__inner__item__arrow">→&nbsp;</span><li className="topbar__inner__item text-trans--uppercase">
-                        <Link to="/">Works</Link>
-                    </li>
-
-                    <li className="topbar__inner__item text-trans--uppercase">
-                        &nbsp;<Link to="/exhibitions">Exhibitions</Link>
-                    </li>
-
-                    <li className="topbar__inner__item text-trans--uppercase">
-                        &nbsp;<Link to="/about">About</Link>
-                    </li>
-
-                    <li className="topbar__inner__item text-trans--uppercase">
-                        &nbsp;<Link to="mailto:info@mostradorgallery.com">Contact</Link>
-                    </li>
-
-                    <li className="topbar__inner__item text-trans--uppercase">
-                        &nbsp;<Link to="https://www.instagram.com/mostradorgallery/" target="_blank">Instagram</Link>
-                    </li>
-                </ul>
-            </nav>
-
-            </>
-        )
-    }
-
-
+                )}
+            </ul>
+        </nav>
+        </>
+    )
 }
 
 export default Topbar;

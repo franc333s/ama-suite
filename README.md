@@ -1,106 +1,66 @@
 # ama-suite
 
-ama-suite is a monorepo that brings together multiple internal projects under a single repository. At the moment, it contains two frontend applications that are developed and maintained as part of the same ecosystem.
-
-## Overview
-
-This workspace is designed to simplify collaboration and shared maintenance across related products. The current structure includes:
-
-- ama-mostrador
-- ama-martinez-siesta
-
-Both projects are modern React applications built with Vite for fast development and production builds. Styling is handled with Sass, and the setup includes linting and tooling to support a clean development workflow.
+Monorepo that brings together the websites of the ama ecosystem. Each website is an independent package with its own code, dependencies and README. They share the tooling and the way of working described here.
 
 ## Projects
 
-### ama-mostrador
-A React-based application built with Vite and TypeScript, focused on delivering a modern and maintainable user experience.
+| Package | What it is | Docs |
+|---|---|---|
+| [`ama-mostrador`](packages/ama-mostrador) | Website of Mostrador Gallery. Content managed in WordPress | [README](packages/ama-mostrador/README.md) |
+| [`ama-martinez-siesta`](packages/ama-martinez-siesta) | Website that shows projects (home feed, project list and project detail). Content read from a WordPress site | Pending |
 
-### ama-martinez-siesta
-A React-based application built with Vite, designed as another internal project within the monorepo.
-
-## Tech stack
-
-- React
-- Vite
-- Sass
-- ESLint
-- TypeScript (used in ama-mostrador)
+Both are React single-page apps built with Vite, TypeScript and Sass. Each package manages its own dependency versions, so they do not have to be on the same React version.
 
 ## Repository structure
-
-The repository is organized as a root workspace that hosts multiple internal projects under the packages directory:
 
 ```text
 ama-suite/
 ├── package.json
 ├── pnpm-workspace.yaml
-├── packages/
+├── packages/              One folder per website
 │   ├── ama-mostrador/
 │   └── ama-martinez-siesta/
+└── wordpress/             Code that runs on the WordPress servers, kept here under version control
 ```
 
-Each project is managed as its own package while still benefiting from the shared monorepo setup.
+`wordpress/` holds the plugins that the websites depend on (for example, the plugin that publishes the Mostrador content as static JSON). They are not part of any build: they are uploaded to the server by hand, and each package README explains how.
 
 ## Getting started
 
-Make sure you have Node.js installed and use pnpm as the package manager.
+Requirements: Node.js and [pnpm](https://pnpm.io) (the version is set in `devEngines` in the root `package.json`). Use `pnpm` and not `npm`.
 
-Install dependencies from the repository root:
+Install the dependencies once, from the repository root:
 
 ```bash
 pnpm install
 ```
 
-Run a specific application from the root:
+Run a package with a filter, always from the root:
 
 ```bash
 pnpm --filter ama-mostrador dev
 pnpm --filter ama-martinez-siesta dev
 ```
 
-## Building for production
+Running `tsc` or `vite` directly from the root fails, because they are only installed inside each package.
 
-Run the build for a specific application from the repository root (dependencies must be installed first with `pnpm install`):
+## Common commands
 
-```bash
-pnpm --filter ama-mostrador build
-pnpm --filter ama-martinez-siesta build
-```
+| Command | What it does |
+|---|---|
+| `pnpm --filter <package> dev` | Development server |
+| `pnpm --filter <package> build` | Type check and production build, output in `packages/<package>/dist/` |
+| `pnpm --filter <package> preview` | Serves the production build locally |
+| `pnpm --filter <package> lint` | ESLint |
+| `pnpm -r build` | Builds every package |
 
-Each build runs `tsc -b && vite build` and outputs the result to the `dist/` folder inside the corresponding package (for example `packages/ama-mostrador/dist/`).
+Environment variables, routes, content sources and deployment depend on each website: see its README.
 
-To build every project at once:
+## Working conventions
 
-```bash
-pnpm -r build
-```
-
-To preview a production build locally:
-
-```bash
-pnpm --filter ama-mostrador preview
-pnpm --filter ama-martinez-siesta preview
-```
-
-Note: use `pnpm` rather than `npm`, and run the scripts through it. Running `tsc` or `vite` directly will fail because they are only available inside each package's `node_modules`.
-
-## Development workflow
-
-To keep the monorepo consistent, the following practices are recommended:
-
-- Install dependencies at the root so the workspace is configured correctly.
-- Run project-specific commands from the root using pnpm filters.
-- Keep each internal project isolated in its own package folder.
-- Use shared conventions for styling, tooling, and linting as the monorepo grows.
-
-## Shared conventions
-
-As the monorepo evolves, the goal is to keep shared standards consistent across projects. This includes:
-
-- consistent use of React and Vite across internal apps
-- shared styling practices with Sass
-- common linting and build tooling
-- reusable configuration patterns as the number of projects grows
-
-This monorepo structure makes it easier to evolve shared conventions, keep projects aligned, and work on multiple internal apps from one place.
+- **Branches:** day-to-day work happens on `develop`, or on `feature/*` branches merged into it.
+- **Commits:** [Conventional Commits](https://www.conventionalcommits.org) style (`feat:`, `fix:`, `perf:`, `style:`, `docs:`, `chore:`), short and in English.
+- **Before committing:** `lint` and `build` of the affected package must pass without errors.
+- **Isolation:** a package does not import code from another one. If something has to be shared, it is discussed before creating a shared package.
+- **Styles:** Sass, with BEM-style class names and one stylesheet per component.
+- **Documentation:** project-specific details go in the README of that package. This README only covers what applies to the whole repository.

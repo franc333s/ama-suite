@@ -3,9 +3,11 @@ const ABOUT_ENDPOINT = `${API_URL}/wp-json/mostrador/v1/about`;
 // JSON estático que genera el plugin de WordPress (wordpress/mostrador-works-json.php)
 const ABOUT_JSON_URL = `${API_URL}/wp-content/uploads/mostrador/about.json`;
 
-// Cualquier campo vacío en WordPress llega como "" (o lista vacía) y la página no lo pinta
+// Cualquier campo vacío en WordPress llega como "" (o lista vacía) y la web no lo pinta
 export interface AboutData {
-  email: string;
+  mailinfo: string; // contacto general (menú, footer y página About)
+  mailcontact: string; // consultas de compra (botón Inquire)
+  instagram: string; // URL del perfil de Instagram
   based: string;
   about: string[];
   image: string;

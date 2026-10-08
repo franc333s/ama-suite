@@ -2,11 +2,13 @@ import ButtonPrimary from "../../buttons/ButtonPrimary"
 import type { ProductDescriptionProps } from "./ProductDescription.interface"
 import "./ProductDescription.scss"
 import { splitParagraphs } from "../../../utils/richText"
+import { useAbout } from "../../../hooks/useAbout"
 
 
 function ProductDescription({ productDescription, editionType }: ProductDescriptionProps) {
 
     const paragraphs = splitParagraphs(productDescription)
+    const about = useAbout()
 
     return (
         <>
@@ -24,10 +26,12 @@ function ProductDescription({ productDescription, editionType }: ProductDescript
                     <p className="product-desc__text">{editionType}</p>
                 </div>
 
-                <div>
-                    <p className="product-desc__title">Purchase</p>
-                    <ButtonPrimary to="mailto:contact@mostradorgallery.com" text="Inquire" openInNewTab />
-                </div>
+                {about?.mailcontact && (
+                    <div>
+                        <p className="product-desc__title">Purchase</p>
+                        <ButtonPrimary to={`mailto:${about.mailcontact}`} text="Inquire" openInNewTab />
+                    </div>
+                )}
             </aside>
         </section>
 

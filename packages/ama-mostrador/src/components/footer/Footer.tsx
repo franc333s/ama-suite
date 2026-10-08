@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom"
 import CollectToday from "../collectToday/CollectToday"
+import { useAbout } from "../../hooks/useAbout"
 import "./Footer.scss"
 
 function Footer() {
+
+    const about = useAbout()
 
     return (
         <>
@@ -23,14 +26,18 @@ function Footer() {
                 <p className="footer__index">4</p>
                 <p className="footer__item text-trans--uppercase">Newsletter</p>
             </div>
-            <div className="footer__inner footer__inner--jc--end">
-                <p className="footer__index">5</p>
-                <p className="footer__item text-trans--uppercase"><Link to="mailto:info@mostradorgallery.com">Contact</Link></p>
-            </div>
-            <div className="footer__inner footer__inner--jc--end">
-                <p className="footer__index">6</p>
-                <p className="footer__item text-trans--uppercase"><Link to="https://www.instagram.com/mostradorgallery/" target="_blank">Instagram</Link></p>
-            </div>
+            {about?.mailinfo && (
+                <div className="footer__inner footer__inner--jc--end">
+                    <p className="footer__index">5</p>
+                    <p className="footer__item text-trans--uppercase"><Link to={`mailto:${about.mailinfo}`}>Contact</Link></p>
+                </div>
+            )}
+            {about?.instagram && (
+                <div className="footer__inner footer__inner--jc--end">
+                    <p className="footer__index">6</p>
+                    <p className="footer__item text-trans--uppercase"><Link to={about.instagram} target="_blank">Instagram</Link></p>
+                </div>
+            )}
         </footer>
         </>
     )

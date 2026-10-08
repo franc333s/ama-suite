@@ -1,20 +1,13 @@
-import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import Footer from "../components/footer/Footer"
 import Topbar from "../components/topbar/Topbar"
-import { getAbout, type AboutData } from "../api/about"
+import { useAbout } from "../hooks/useAbout"
 import { splitParagraphs } from "../utils/richText"
 
 function About() {
 
     // Todo el contenido viene de WordPress: lo que esté vacío allí no se pinta
-    const [ content, setContent ] = useState<AboutData | null>(null);
-
-    useEffect(() => {
-        getAbout()
-          .then(setContent)
-          .catch((err) => console.error('Error al cargar la página About:', err));
-      }, []);
+    const content = useAbout();
 
     const paragraphs = splitParagraphs(content?.about);
 
@@ -28,7 +21,7 @@ function About() {
                     <div>
                         <p className="about__title">Email</p>
                         <h1 className="about__text">
-                            {content?.email && <Link to={`mailto:${content.email}`} target="_blank">{content.email}</Link>}
+                            {content?.mailinfo && <Link to={`mailto:${content.mailinfo}`} target="_blank">{content.mailinfo}</Link>}
                         </h1>
                     </div>
                     <div>

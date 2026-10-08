@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Mostrador Works JSON
  * Description: Genera un JSON estático con los trabajos (tipo "work") y las exposiciones (tipo "exhibition") cada vez que se crean, editan o borran, para que la web los lea sin arrancar PHP.
- * Version: 1.2.0
+ * Version: 1.3.0
  */
 
 /*
@@ -40,9 +40,11 @@
  * does not exist yet, it is simply skipped.
  *
  * The same plugin also publishes the content of the About page as about.json
- * (email, based, about text and image). That content lives in the Pods pod
- * "about" (a custom post type), in its first published item, with the fields
- * "email", "based", "text" and "image".
+ * (mailinfo, mailcontact, instagram, based, about text and image). That content
+ * lives in the Pods pod "about" (a custom post type), in its first published
+ * item, with the fields "mailinfo", "mailcontact", "instagram", "based", "text"
+ * and "image". The website also uses the emails and the Instagram link in the
+ * menu, the footer and the Inquire button.
  * See src/api/about.ts and src/pages/About.tsx in the website.
  *
  * Output: wp-content/uploads/mostrador/works.json, exhibitions.json and about.json
@@ -163,6 +165,16 @@ function mostrador_collect_about() {
 		return $item_id ? get_post_meta( $item_id, strtok( $field, '.' ), true ) : '';
 	};
 
+	// Campo de una sola línea: si Pods lo devuelve como lista (campo con varios
+	// valores), se usa el primero
+	$get_line = function ( $field ) use ( $get ) {
+		$value = $get( $field );
+		if ( is_array( $value ) ) {
+			$value = reset( $value );
+		}
+		return is_scalar( $value ) ? trim( (string) $value ) : '';
+	};
+
 	$text = $get( 'text' );
 	if ( ! is_array( $text ) ) {
 		$text = array( $text );
@@ -176,8 +188,10 @@ function mostrador_collect_about() {
 	$image_id = (int) $image;
 
 	return array(
-		'email'     => trim( (string) $get( 'email' ) ),
-		'based'     => trim( (string) $get( 'based' ) ),
+		'mailinfo'    => sanitize_email( $get_line( 'mailinfo' ) ),
+		'mailcontact' => sanitize_email( $get_line( 'mailcontact' ) ),
+		'instagram'   => esc_url_raw( $get_line( 'instagram' ) ),
+		'based'     => $get_line( 'based' ),
 		'about'     => $text,
 		'image'     => $image_id ? (string) wp_get_attachment_image_url( $image_id, 'full' ) : '',
 		'image_alt' => $image_id ? (string) get_post_meta( $image_id, '_wp_attachment_image_alt', true ) : '',
