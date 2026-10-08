@@ -54,8 +54,9 @@
     }
 }
 
-// 404: the footer stays at the bottom of the page even if there is little content
-.not-found {
+// The footer stays at the bottom of the page even if there is little content,
+// and is pushed down (reached by scrolling) when there is a lot
+.page-fill {
     display: flex;
     flex-direction: column;
     min-height: 100vh;

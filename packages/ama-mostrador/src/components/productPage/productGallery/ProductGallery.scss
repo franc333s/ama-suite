@@ -19,4 +19,12 @@
     @include mixins.mq(variables.$bp-lowerlarge) {
         grid-template-columns: 1fr 1fr 1fr;
     }
+
+    // Galería de exposiciones: se queda en 2 columnas en pantallas grandes
+    &--wide {
+
+        @include mixins.mq(variables.$bp-lowerlarge) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
 }

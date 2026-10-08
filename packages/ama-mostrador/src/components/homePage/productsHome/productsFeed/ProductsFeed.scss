@@ -24,5 +24,16 @@
     @include mixins.mq(variables.$bp-xlowerlarge) {
         grid-template-columns: repeat(4, 1fr);
     }
-}
 
+    // Sin elementos: el mensaje queda centrado en el espacio disponible
+    &--empty {
+        padding-top: 0;
+        align-content: center;
+        justify-items: center;
+
+        .products-feed__empty {
+            font-size: 2rem;
+        }
+
+    }
+}

@@ -5,10 +5,10 @@ import Topbar from "../components/topbar/Topbar"
 function NotFound() {
 
     return (
-        <div className="not-found">
+        <div className="page-fill">
         <meta name="robots" content="noindex" />
         <Topbar />
-        <main className="about not-found__main">
+        <main className="about page-fill__main">
 
             <section className="about__sect">
                 <div>

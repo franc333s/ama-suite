@@ -9,11 +9,17 @@ import ProductIntro from "../components/productPage/productIntro/ProductIntro";
 import ProductDescription from "../components/productPage/productDescription/ProductDescription";
 import ProductGallery from "../components/productPage/productGallery/ProductGallery";
 import type { Product } from "../types/product";
-import { getWorkBySlug } from "../api/works";
 import NotFound from "./NotFound";
 
 
-function OneProduct() {
+interface OneProductProps {
+    // Busca la ficha por su slug (works, exhibitions...)
+    loadBySlug: (slug: string) => Promise<Product | null>;
+    // Galería de imágenes más grandes (hasta 2 columnas en vez de 4)
+    wideGallery?: boolean;
+}
+
+function OneProduct({ loadBySlug, wideGallery = false }: OneProductProps) {
 
     const { slug } = useParams();
     const [ product, setProduct ] = useState<Product | null>(null);
@@ -21,13 +27,13 @@ function OneProduct() {
 
     useEffect(() => {
         if (!slug) return;
-        getWorkBySlug(slug)
+        loadBySlug(slug)
           .then((work) => {
             if (work) setProduct(work);
             else setNotFound(true);
           })
           .catch((err) => console.error('Error al cargar el producto:', err));
-      }, [slug]);
+      }, [slug, loadBySlug]);
 
     if (notFound) return <NotFound />;
 
@@ -45,6 +51,7 @@ function OneProduct() {
                             <ProductHero
 
                                 heroImg={
+                                    product.hero_image ||
                                     product._embedded?.['wp:featuredmedia']?.[0]?.media_details?.sizes?.medium_large?.source_url ||
                                     product._embedded?.['wp:featuredmedia']?.[0]?.media_details?.sizes?.medium?.source_url ||
                                     product._embedded?.['wp:featuredmedia']?.[0]?.media_details?.sizes?.full?.source_url ||
@@ -77,6 +84,7 @@ function OneProduct() {
 
                             <ProductGallery
                                 product={product}
+                                wide={wideGallery}
                             />
 
 

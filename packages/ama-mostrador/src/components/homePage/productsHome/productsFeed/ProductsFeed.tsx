@@ -1,10 +1,22 @@
 import { useEffect, useRef, useState } from 'react';
 import ProductCard from "../productCard/ProductCard";
 import type { Product } from "../../../../types/product";
-import { getWorks } from "../../../../api/works";
+import type { CollectionPage } from "../../../../api/collection";
 import './ProductsFeed.scss'
 
-function ProductsFeed() {
+interface ProductsFeedProps {
+  // Carga una página del listado (works, exhibitions...)
+  loadPage: (page: number) => Promise<CollectionPage>;
+  // Ruta base de las fichas: cada tarjeta enlaza a `${basePath}/${slug}`
+  basePath: string;
+  emptyMessage?: string;
+  // Clase extra para el <main> (por ejemplo para que ocupe el alto disponible)
+  className?: string;
+  // Enseña el mensaje de vacío desde el primer momento, sin esperar a que cargue el listado
+  showEmptyWhileLoading?: boolean;
+}
+
+function ProductsFeed({ loadPage, basePath, emptyMessage = 'No hay trabajos aún.', className = '', showEmptyWhileLoading = false }: ProductsFeedProps) {
   const [works, setWorks] = useState<Product[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -13,18 +25,19 @@ function ProductsFeed() {
 
   const loading = loadedPage < page;
   const hasMore = page < totalPages;
+  const isEmpty = works.length === 0 && (!loading || showEmptyWhileLoading);
 
   useEffect(() => {
     let cancelled = false;
 
-    getWorks(page)
-      .then(({ works: newWorks, totalPages }) => {
+    loadPage(page)
+      .then(({ items: newWorks, totalPages }) => {
         if (cancelled) return;
         setWorks((prev) => [...prev, ...newWorks]);
         setTotalPages(totalPages);
       })
       .catch((err) => {
-        console.error('Error al cargar trabajos:', err);
+        console.error('Error al cargar el listado:', err);
         if (!cancelled) setTotalPages(page);
       })
       .finally(() => {
@@ -34,7 +47,7 @@ function ProductsFeed() {
     return () => {
       cancelled = true;
     };
-  }, [page]);
+  }, [page, loadPage]);
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -53,9 +66,9 @@ function ProductsFeed() {
 
   return (
     <>
-    <main className="products-feed">
+    <main className={`products-feed ${isEmpty ? 'products-feed--empty' : ''} ${className}`.trim()}>
       {works.length === 0 ? (
-        !loading && <p>No hay trabajos aún.</p>
+        isEmpty && <p className="products-feed__empty">{emptyMessage}</p>
       ) : (
         works.map((item, index) => {
             const imageUrl =
@@ -67,7 +80,7 @@ function ProductsFeed() {
             <ProductCard
                 key={item.id}
                 index={formattedId}
-                url={`/works/${item.slug}`}
+                url={`${basePath}/${item.slug}`}
                 productImg={imageUrl}
                 productImgAltText={item.title.rendered}
                 productName={item.title.rendered}
