@@ -8,6 +8,7 @@
     left: 0;
     z-index: -1;
     object-fit: cover;
+    background-color: variables.$color-bg-video;
 
     will-change: transform;
     backface-visibility: hidden;
