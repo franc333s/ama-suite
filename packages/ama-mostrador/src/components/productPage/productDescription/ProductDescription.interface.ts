@@ -1,4 +1,4 @@
 export interface ProductDescriptionProps {
-  productDescription?: string;
+  productDescription?: string | string[];
   editionType?: string;
 }
