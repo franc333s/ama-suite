@@ -1,0 +1,10 @@
+@use "../../scss/abstracts/variables";
+
+.collect-today--home {
+    color: variables.$color-full-black;
+    background-color: variables.$color-bg-full-white;
+    font-size: 16px;
+    line-height: 116%;
+    text-align: center;
+    padding: 7rem variables.$vertical-padding 0;
+}

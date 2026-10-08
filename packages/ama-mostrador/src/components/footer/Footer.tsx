@@ -1,10 +1,8 @@
 import { Link } from "react-router-dom"
+import CollectToday from "../collectToday/CollectToday"
 import "./Footer.scss"
 
 function Footer() {
-
-    const currentDate = new Date();
-    const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`
 
     return (
         <>
@@ -19,7 +17,7 @@ function Footer() {
             </div>
             <div className="footer__inner footer__inner--jc--center">
                 <p className="footer__index">3</p>
-                <p className="footer__item text-trans--uppercase">Collect today [{formattedDate}], own forever</p>
+                <CollectToday className="footer__item" />
             </div>
             <div className="footer__inner footer__inner--jc--end">
                 <p className="footer__index">4</p>
